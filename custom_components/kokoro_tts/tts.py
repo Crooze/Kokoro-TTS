@@ -37,7 +37,7 @@ DEFAULT_NAME = "kokoro"
 _LOGGER = logging.getLogger(__name__)
 
 # Options you can override per-call via tts.speak -> data.options
-SUPPORTED_OPTIONS = ["persona", "speed", "format", "sample_rate", "volume_multiplier"]
+SUPPORTED_OPTIONS = ["persona", "speed", "format", "sample_rate", "volume_multiplier", "voice"]
 
 
 # -------- YAML schema (optional; UI uses config entries) --------
