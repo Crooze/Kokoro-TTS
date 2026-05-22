@@ -13,23 +13,24 @@ CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up the Kokoro TTS component."""
-    # Register WebSocket command for audio preview
     try:
         from homeassistant.components.websocket_api import async_register_command
         from .config_flow import websocket_preview_audio
         async_register_command(hass, websocket_preview_audio)
     except ImportError:
-        # WebSocket API not available, skip preview functionality
         pass
     return True
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Kokoro TTS from a config entry."""
-    
-    # For TTS platforms, we need to forward the setup to the TTS platform
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Reload the config entry when options change."""
+    await hass.config_entries.async_reload(entry.entry_id)
