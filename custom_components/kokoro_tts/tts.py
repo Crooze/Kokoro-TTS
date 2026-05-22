@@ -62,7 +62,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         _LOGGER.info("Setting up Kokoro TTS entity from config entry")
         _LOGGER.debug("Config entry data: %s", config_entry.data)
         
-        config_data = config_entry.data
+        config_data = {**config_entry.data, **config_entry.options}
         name = config_data.get(CONF_NAME, DEFAULT_NAME)
         base_url = config_data[CONF_BASE_URL].rstrip("/")
         api_key = config_data.get(CONF_API_KEY, "x") or "x"
